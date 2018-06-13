@@ -23,8 +23,11 @@ public class InsertingData {
     public static void main(String[] args) {
         InsertingData insertingData=new InsertingData();
         String filePathToInsert=args[0];
+        String dbName=args[1];
+        String collection=args[2];
         ArrayList<Document> docArray=insertingData.getArrayBson(filePathToInsert);
-        boolean isInserted=insertingData.insertDB(docArray);
+        boolean isInserted=insertingData.insertDB(docArray,dbName,collection);
+        System.out.println("Data Inserted "+isInserted);
 
 
     }
@@ -91,14 +94,14 @@ public class InsertingData {
     }
 
 
-    public boolean insertDB(ArrayList<Document> alDocument) {
+    public boolean insertDB(ArrayList<Document> alDocument,String dbName,String collection) {
         MongoClient mongoClient = null;
         MongoDatabase mongoDatabase = null;
         boolean b = false;
         try {
             mongoClient = new MongoClient("192.168.174.128", 27017);
-            mongoDatabase = mongoClient.getDatabase("ramana");
-            MongoCollection<Document> mongoCollection = mongoDatabase.getCollection("restaurents");
+            mongoDatabase = mongoClient.getDatabase(dbName);
+            MongoCollection<Document> mongoCollection = mongoDatabase.getCollection(collection);
             mongoCollection.insertMany(alDocument);
             b = true;
         }
